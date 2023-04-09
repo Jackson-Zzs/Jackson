@@ -1,8 +1,16 @@
 import React from 'react';
 
+function MyButton () {
+  <button>myButton</button>
+}
+
 function App () {
   return (
-    <>Let&apos;s go!</>
+    <>
+    hello
+    <MyButton />
+    <MyButton />
+    </>
   );
 }
 
