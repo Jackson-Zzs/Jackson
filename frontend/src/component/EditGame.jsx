@@ -1,12 +1,14 @@
 // EditGame.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Input, message } from 'antd';
+import { Button, Input, message, Modal, Form } from 'antd';
 
 function EditGame ({ token }) {
   const { gameid } = useParams();
   const [quiz, setQuiz] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
+  const [addQuestionModalVisible, setAddQuestionModalVisible] = useState(false);
+  const [questionForm] = Form.useForm();
 
   useEffect(() => {
     async function fetchQuiz () {
@@ -41,16 +43,33 @@ function EditGame ({ token }) {
     message.success('Quiz updated successfully!');
   }
 
-  async function deleteQuiz () {
+  async function addQuestion () {
+    const questionData = questionForm.getFieldsValue();
+    const newQuestion = {
+      question: questionData.question,
+      options: [questionData.option1, questionData.option2, questionData.option3, questionData.option4].filter(
+        (option) => option
+      ),
+    };
+
+    const updatedQuestions = [...quiz.questions, newQuestion];
+
     await fetch(`http://localhost:5005/admin/quiz/${gameid}`, {
-      method: 'DELETE',
+      method: 'PUT',
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        ...quiz,
+        questions: updatedQuestions,
+      }),
     });
 
-    message.success('Quiz deleted successfully!');
+    setQuiz({ ...quiz, questions: updatedQuestions });
+    setAddQuestionModalVisible(false);
+    questionForm.resetFields();
+    message.success('Question added successfully!');
   }
 
   const handleImageChange = (e) => {
@@ -86,9 +105,58 @@ function EditGame ({ token }) {
       <br />
       <br />
       <Button onClick={updateQuiz}>Update Quiz</Button>
-      <Button onClick={deleteQuiz} style={{ marginLeft: '8px' }}>
-        Delete Quiz
+      <Button
+        onClick={() => {
+          setAddQuestionModalVisible(true);
+        }}
+        style={{ marginLeft: '8px' }}
+      >
+        Add Questions
       </Button>
+
+      <Modal
+        title="Add Question"
+        visible={addQuestionModalVisible}
+        onCancel={() => setAddQuestionModalVisible(false)}
+        footer={[
+          <Button key="cancel" onClick={() => setAddQuestionModalVisible(false)}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={addQuestion}>
+            Add Question
+          </Button>,
+        ]}
+      >
+        <Form form={questionForm}>
+          <Form.Item
+            label="Question"
+            name="question"
+            rules={[{ required: true, message: 'Please input the question!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Option 1"
+            name="option1"
+            rules={[{ required: true, message: 'Please input the first option!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Option 2"
+            name="option2"
+            rules={[{ required: true, message: 'Please input the second option!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item label="Option 3" name="option3">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Option 4" name="option4">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }
