@@ -1,17 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import Welcome from './component/Welcome';
 import Register from './component/Register';
 import LogIn from './component/LogIn';
 import Dashboard from './component/Dashboard';
-
-function Nav ({ onLogout }) {
-  return (
-    <>
-      <button onClick={onLogout}>Logout</button>
-      <hr />
-    </>
-  );
-}
+import LogOut from './component/LogOut';
+import EditGame from './component/EditGame';
 
 function Main () {
   const [token, setToken] = React.useState(null);
@@ -31,12 +25,14 @@ function Main () {
 
   return (
     <>
-      {token && <Nav onLogout={logout} />}
+      {token && <LogOut onLogout={logout} token={token} />}
+      <hr />
       <Routes>
-        <Route path="/" element={<div>111</div>} />
+        <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<LogIn onSuccess={manageToken} />} />
         <Route path="/register" element={<Register onSuccess={manageToken} />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard token={token} />} />
+        <Route path="/editgame/:gameid" element={<EditGame token={token} />} />
       </Routes>
     </>
   );

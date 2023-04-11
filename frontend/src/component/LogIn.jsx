@@ -27,6 +27,7 @@ function LogIn ({ onSuccess }) {
       });
       if (response.ok) {
         const data = await response.json();
+        console.log(data.token);
         onSuccess(data.token);
         console.log(data);
         navigate('/dashboard');
