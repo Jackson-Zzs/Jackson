@@ -10,7 +10,7 @@ import EditGame from './component/EditGame';
 function Main () {
   const [token, setToken] = React.useState(null);
   const navigate = useNavigate();
-  console.log(token);
+  // console.log(token);
 
   const logout = () => {
     setToken(null);

@@ -100,10 +100,54 @@ function EditGame ({ token }) {
       <br />
       <input type="file" accept="image/*" onChange={handleImageChange} />
       {imageUrl && (
-        <img src={imageUrl} alt="preview" style={{ width: '100%', height: '100%' }} />
+        <img src={imageUrl} alt="preview" style={{ width: '50%', height: '50%', objectFit: 'cover' }} />
       )}
       <br />
       <br />
+      <br />
+<br />
+<h2>Questions</h2>
+{quiz.questions.map((question, index) => (
+  <div key={index} style={{ marginBottom: '16px' }}>
+    <p>
+      {index + 1}. {question.question}
+    </p>
+    <ul>
+      {question.options.map((option, i) => (
+        <li key={i}>{option}</li>
+      ))}
+    </ul>
+    <Button
+      onClick={() => {
+        // Implement the edit question functionality
+      }}
+    >
+      Edit
+    </Button>
+    <Button
+      onClick={async () => {
+        const updatedQuestions = quiz.questions.filter((_, i) => i !== index);
+        await fetch(`http://localhost:5005/admin/quiz/${gameid}`, {
+          method: 'PUT',
+          headers: {
+            'Content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ...quiz,
+            questions: updatedQuestions,
+          }),
+        });
+
+        setQuiz({ ...quiz, questions: updatedQuestions });
+        message.success('Question deleted successfully!');
+      }}
+      style={{ marginLeft: '8px' }}
+    >
+      Delete
+    </Button>
+  </div>
+))}
       <Button onClick={updateQuiz}>Update Quiz</Button>
       <Button
         onClick={() => {

@@ -3,7 +3,7 @@ import { Button, Card, Input, Row, Col } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 function Dashboard ({ token }) {
-  console.log(token);
+  // console.log(token);
 
   const [newGameShow, setNewGameShow] = React.useState(false);
   const [quizzes, setQuizzes] = React.useState([]);
@@ -74,7 +74,7 @@ function Dashboard ({ token }) {
     fetchAllQuizzes();
   }, [newGameShow, token]);
 
-  console.log(quizzes);
+  // console.log(quizzes);
   return (
     <>
       <h1>Dashboard</h1>
@@ -110,7 +110,7 @@ function Dashboard ({ token }) {
                 title={quiz.name}
               >
                 <img src={quiz.thumbnail} alt="Please update Thumbnail" style={{ maxWidth: '100%' }} />
-                <p>Questions: {quiz.questionsCount}</p>
+                <p>Questions Number: {quiz.questionsCount}</p>
                 <p>ID: {quiz.id}</p>
                 {
                   <>
