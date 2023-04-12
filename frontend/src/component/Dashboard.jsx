@@ -8,6 +8,7 @@ function Dashboard ({ token }) {
   const [newGameShow, setNewGameShow] = React.useState(false);
   const [quizzes, setQuizzes] = React.useState([]);
   const [newQuizName, setNewQuizName] = React.useState('');
+  // const [questions, setQuestions] = React.useState([])
   const navigate = useNavigate();
 
   async function fetchAllQuizzes () {
@@ -19,7 +20,23 @@ function Dashboard ({ token }) {
       },
     });
     const data = await response.json();
-    setQuizzes(data.quizzes);
+    const quizzesWithQuestionsCount = await Promise.all(
+      data.quizzes.map(async (quiz) => {
+        const questionsResponse = await fetch(
+          `http://localhost:5005/admin/quiz/${quiz.id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const questionsData = await questionsResponse.json();
+        return { ...quiz, questionsCount: questionsData.questions.length };
+      })
+    );
+    setQuizzes(quizzesWithQuestionsCount);
   }
 
   async function createNewGame () {
@@ -55,8 +72,9 @@ function Dashboard ({ token }) {
 
   React.useEffect(() => {
     fetchAllQuizzes();
-  }, [newGameShow]);
+  }, [newGameShow, token]);
 
+  console.log(quizzes);
   return (
     <>
       <h1>Dashboard</h1>
@@ -90,7 +108,11 @@ function Dashboard ({ token }) {
             <Col key={quiz.id} xs={24} sm={12} md={8} lg={6}>
               <Card
                 title={quiz.name}
-                extra={
+              >
+                <img src={quiz.thumbnail} alt="Please update Thumbnail" style={{ maxWidth: '100%' }} />
+                <p>Questions: {quiz.questionsCount}</p>
+                <p>ID: {quiz.id}</p>
+                {
                   <>
                     <Button onClick={() => editGame(quiz.id)}>Edit</Button>
                     <Button
@@ -101,10 +123,6 @@ function Dashboard ({ token }) {
                     </Button>
                   </>
                 }
-              >
-                <img src={quiz.thumbnail} alt="Thumbnail" style={{ maxWidth: '100%' }} />
-                <p>Questions: {quiz.questions}</p>
-                <p>ID: {quiz.id}</p>
               </Card>
             </Col>
           ))}
