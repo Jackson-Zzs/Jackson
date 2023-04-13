@@ -31,11 +31,16 @@ function EditQuestion ({ token }) {
     const updatedQuestionData = questionForm.getFieldsValue();
 
     // 处理原始数据用的
-    const options = updatedQuestionData.options.map((option, index) => ({
-      text: option.text,
-      correct: index === updatedQuestionData.correctIndex
-    }));
-    // const correctIndex = updatedQuestionData.correctIndex;
+    const options =
+    updatedQuestionData.type === 'single'
+      ? updatedQuestionData.options.map((option, index) => ({
+        text: option.text,
+        correct: index === updatedQuestionData.correctIndex,
+      }))
+      : updatedQuestionData.options.map((option, index) => ({
+        text: option.text,
+        correct: option.correct,
+      }));
 
     // 到这里结束
 
@@ -135,10 +140,7 @@ function EditQuestion ({ token }) {
             <Input />
         </Form.Item>
         <h2>Answers</h2>
-        <Form.List
-          name="options"
-          initialValue={question.options.map((option) => ({ text: option }))}
-        >
+        <Form.List name="options">
           {(fields, { add, remove }) => (
             <>
               {fields.map((field, index) => (
@@ -155,31 +157,12 @@ function EditQuestion ({ token }) {
                     <Input />
                   </Form.Item>
                   <Form.Item
-                    name={`correct-${index}`}
-                    initialValue={index === question.correctIndex}
+                    name={[field.name, 'correct']}
                     valuePropName="checked"
+                    initialValue={question.options[index].correct}
                     noStyle
-                    rules={[
-                      {
-                        validator: async (_, value) => {
-                          if (!value) {
-                            throw new Error('Please choose a correct option!');
-                          }
-                        },
-                      },
-                    ]}
-                    >
-
-                    <Checkbox
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          questionForm.setFieldsValue({ correctIndex: index });
-                        }
-                      }}
-                      checked={index === questionForm.getFieldValue('correctIndex')}
-                    >
-                      Correct
-                    </Checkbox>
+                  >
+                    <Checkbox />
                   </Form.Item>
                 </div>
               ))}
