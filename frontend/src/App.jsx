@@ -6,6 +6,7 @@ import LogIn from './component/LogIn';
 import Dashboard from './component/Dashboard';
 import LogOut from './component/LogOut';
 import EditGame from './component/EditGame';
+import EditQuestion from './component/EditQuestion';
 
 function Main () {
   const [token, setToken] = React.useState(null);
@@ -33,6 +34,7 @@ function Main () {
         <Route path="/register" element={<Register onSuccess={manageToken} />} />
         <Route path="/dashboard" element={<Dashboard token={token} />} />
         <Route path="/editgame/:gameid" element={<EditGame token={token} />} />
+        <Route path="/editquestion/game/:gameid/question/:questionid" element={<EditQuestion token={token} />} />
       </Routes>
     </>
   );

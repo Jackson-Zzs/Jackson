@@ -1,6 +1,6 @@
 // EditGame.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Input, message, Modal, Form } from 'antd';
 
 function EditGame ({ token }) {
@@ -9,6 +9,7 @@ function EditGame ({ token }) {
   const [imageUrl, setImageUrl] = useState('');
   const [addQuestionModalVisible, setAddQuestionModalVisible] = useState(false);
   const [questionForm] = Form.useForm();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchQuiz () {
@@ -39,17 +40,33 @@ function EditGame ({ token }) {
         thumbnail: imageUrl,
       }),
     });
-
     message.success('Quiz updated successfully!');
   }
 
   async function addQuestion () {
     const questionData = questionForm.getFieldsValue();
+    const options = [
+      { text: questionData.option1, correct: false },
+      { text: questionData.option2, correct: false },
+      { text: questionData.option3, correct: false },
+      { text: questionData.option4, correct: false },
+      { text: questionData.option5, correct: false },
+      { text: questionData.option6, correct: false },
+    ].filter((option) => option.text);
+
+    if (options.length < 2) {
+      message.error('Please provide at least two options!');
+      return;
+    }
+
     const newQuestion = {
+      id: Math.floor(Math.random() * 1000000),
       question: questionData.question,
-      options: [questionData.option1, questionData.option2, questionData.option3, questionData.option4].filter(
-        (option) => option
-      ),
+      options,
+      type: 'single choice',
+      time: 10,
+      points: 1,
+      url: '',
     };
 
     const updatedQuestions = [...quiz.questions, newQuestion];
@@ -99,55 +116,56 @@ function EditGame ({ token }) {
       <br />
       <br />
       <input type="file" accept="image/*" onChange={handleImageChange} />
+      <div>
       {imageUrl && (
         <img src={imageUrl} alt="preview" style={{ width: '50%', height: '50%', objectFit: 'cover' }} />
       )}
+      </div>
       <br />
       <br />
-      <br />
-<br />
-<h2>Questions</h2>
-{quiz.questions.map((question, index) => (
-  <div key={index} style={{ marginBottom: '16px' }}>
-    <p>
-      {index + 1}. {question.question}
-    </p>
-    <ul>
-      {question.options.map((option, i) => (
-        <li key={i}>{option}</li>
-      ))}
-    </ul>
-    <Button
-      onClick={() => {
-        // Implement the edit question functionality
-      }}
-    >
-      Edit
-    </Button>
-    <Button
-      onClick={async () => {
-        const updatedQuestions = quiz.questions.filter((_, i) => i !== index);
-        await fetch(`http://localhost:5005/admin/quiz/${gameid}`, {
-          method: 'PUT',
-          headers: {
-            'Content-type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            ...quiz,
-            questions: updatedQuestions,
-          }),
-        });
+      <h2>Questions</h2>
+      {quiz.questions && quiz.questions.map((question, index) => (
+        <div key={index} style={{ marginBottom: '16px' }}>
+          <p>
+            {index + 1}. {question.question}
+          </p>
+          <ul>
+            {question.options.map((option, i) => (
+              <li key={i}>{option.text}</li>
+            ))}
+          </ul>
+          <Button
+            onClick={() => {
+              console.log(question);
+              navigate(`/editquestion/game/${gameid}/question/${question.id}`);
+            }}
+          >
+            Edit Question
+          </Button>
+          <Button
+            onClick={async () => {
+              const updatedQuestions = quiz.questions.filter((_, i) => i !== index);
+              await fetch(`http://localhost:5005/admin/quiz/${gameid}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  ...quiz,
+                  questions: updatedQuestions,
+                }),
+              });
 
-        setQuiz({ ...quiz, questions: updatedQuestions });
-        message.success('Question deleted successfully!');
-      }}
-      style={{ marginLeft: '8px' }}
-    >
-      Delete
-    </Button>
-  </div>
-))}
+              setQuiz({ ...quiz, questions: updatedQuestions });
+              message.success('Question deleted successfully!');
+            }}
+            style={{ marginLeft: '8px' }}
+          >
+            Delete
+          </Button>
+        </div>
+      ))}
       <Button onClick={updateQuiz}>Update Quiz</Button>
       <Button
         onClick={() => {
@@ -160,7 +178,7 @@ function EditGame ({ token }) {
 
       <Modal
         title="Add Question"
-        visible={addQuestionModalVisible}
+        open={addQuestionModalVisible}
         onCancel={() => setAddQuestionModalVisible(false)}
         footer={[
           <Button key="cancel" onClick={() => setAddQuestionModalVisible(false)}>
@@ -197,6 +215,12 @@ function EditGame ({ token }) {
             <Input />
           </Form.Item>
           <Form.Item label="Option 4" name="option4">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Option 5" name="option5">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Option 6" name="option6">
             <Input />
           </Form.Item>
         </Form>
