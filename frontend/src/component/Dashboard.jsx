@@ -128,7 +128,7 @@ function Dashboard ({ token }) {
         break;
       }
       case 'copy-link': {
-        copyToClipboard(`TODO: Play screen for ${quiz.active}`)
+        copyToClipboard(`${window.location.origin}/results/${quiz.active}`)
         break;
       }
       case 'delete': {
@@ -190,8 +190,12 @@ function Dashboard ({ token }) {
       <Modal key={sessionId}
         title={`${sessionId} ended`}
         open={toModalEnd.has(sessionId)}
-        okText={'Yes (NOT DONE TODO)'}
-        onOk={onClose}
+        okText={'Yes'}
+        onOk={() => {
+          onClose();
+
+          navigate(`/results/${sessionId}`);
+        }}
         cancelText={'No'}
         onCancel={onClose}
       >

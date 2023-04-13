@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Welcome from './component/Welcome';
 import Register from './component/Register';
 import LogIn from './component/LogIn';
@@ -7,11 +7,28 @@ import Dashboard from './component/Dashboard';
 import LogOut from './component/LogOut';
 import EditGame from './component/EditGame';
 import EditQuestion from './component/EditQuestion';
+import GameResults from './component/GameResults';
 
 function Main () {
   const [token, setToken] = React.useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
   // console.log(token);
+
+  // Load token
+  useEffect(() => {
+    const loadedToken = localStorage.getItem('token');
+
+    setToken(loadedToken);
+
+    if (loadedToken) {
+      if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register') {
+        navigate('/dashboard');
+      }
+    } else if (!(location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register')) {
+      navigate('/');
+    }
+  }, [])
 
   const logout = () => {
     setToken(null);
@@ -35,6 +52,7 @@ function Main () {
         <Route path="/dashboard" element={<Dashboard token={token} />} />
         <Route path="/editgame/:gameid" element={<EditGame token={token} />} />
         <Route path="/editquestion/game/:gameid/question/:questionid" element={<EditQuestion token={token} />} />
+        <Route path="/results/:sessionid" element={<GameResults token={token} />} />
       </Routes>
     </>
   );
