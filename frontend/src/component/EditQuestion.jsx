@@ -30,19 +30,12 @@ function EditQuestion ({ token }) {
   async function updateQuestion () {
     const updatedQuestionData = questionForm.getFieldsValue();
 
-    // 处理原始数据用的
-    const options =
-    updatedQuestionData.type === 'single'
-      ? updatedQuestionData.options.map((option, index) => ({
-        text: option.text,
-        correct: index === updatedQuestionData.correctIndex,
-      }))
-      : updatedQuestionData.options.map((option, index) => ({
-        text: option.text,
-        correct: option.correct,
-      }));
+    // handle the options
 
-    // 到这里结束
+    const options = updatedQuestionData.options.map((option) => ({
+      text: option.text,
+      correct: option.correct,
+    }));
 
     // Replace old options with new options
     updatedQuestionData.options = options;
@@ -86,6 +79,41 @@ function EditQuestion ({ token }) {
     return <div>Loading...</div>;
   }
 
+  const correctIndex = question.options.findIndex((option) => option.correct);
+
+  const handleCheckboxChange = (e, index) => {
+    const questionType = questionForm.getFieldValue('type');
+    if (questionType === 'single') {
+      const newOptions = questionForm.getFieldValue('options').map((option, i) => {
+        if (i === index) {
+          return { ...option, correct: true };
+        } else {
+          return { ...option, correct: false };
+        }
+      });
+      questionForm.setFieldsValue({ options: newOptions, correctIndex: index });
+    } else {
+      const newOptions = questionForm.getFieldValue('options').map((option, i) => {
+        if (i === index) {
+          return { ...option, correct: e.target.checked };
+        } else {
+          return option;
+        }
+      });
+      questionForm.setFieldsValue({ options: newOptions });
+    }
+  };
+
+  const handleTypeChange = (value) => {
+    if (value === 'single') {
+      const options = questionForm.getFieldValue('options');
+      const newOptions = options.map((option, index) => {
+        return { ...option, correct: index === 0 }; // set the first option as the correct answer
+      });
+      questionForm.setFieldsValue({ options: newOptions, correctIndex: 0 });
+    }
+  };
+
   return (
     <div>
         <h1>Edit Question</h1>
@@ -98,7 +126,7 @@ function EditQuestion ({ token }) {
               points: question.points,
               url: question.url,
               options: question.options.map((option) => ({ text: option.text })),
-              correctIndex: question.correctIndex,
+              correctIndex,
             }}
         >
         <Form.Item
@@ -114,7 +142,7 @@ function EditQuestion ({ token }) {
           name="type"
           rules={[{ required: true, message: 'Please select the question type!' }]}
         >
-          <Select>
+          <Select onChange={handleTypeChange}>
             <Option value="single">Single Choice</Option>
             <Option value="multiple">Multiple Choice</Option>
           </Select>
@@ -162,7 +190,10 @@ function EditQuestion ({ token }) {
                     initialValue={question.options[index].correct}
                     noStyle
                   >
-                    <Checkbox />
+                    <Checkbox onChange={(e) => handleCheckboxChange(e, index)}>
+                    {/* <Checkbox> */}
+                      Correct Option
+                    </Checkbox>
                   </Form.Item>
                 </div>
               ))}
