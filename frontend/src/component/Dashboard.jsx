@@ -156,7 +156,7 @@ function Dashboard ({ token }) {
                     <Button onClick={() => editGame(quiz.id)}>Edit Game</Button>
                     <Button
                       onClick={() => deleteGame(quiz.id)}
-                      style={{ marginLeft: '8px' }}
+                      style={{ marginLeft: '20px' }}
                     >
                       Delete
                     </Button>
