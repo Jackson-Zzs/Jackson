@@ -1,0 +1,58 @@
+{
+    "name": "Test Game by JSON",
+    "owner": "a",
+    "questions": [
+      {
+        "id": 608001,
+        "question": "This is Question1",
+        "type": "single",
+        "time": 10,
+        "points": 1,
+        "url": "",
+        "options": [
+          {
+            "text": "1",
+            "correct": false
+          },
+          {
+            "text": "2",
+            "correct": false
+          },
+          {
+            "text": "3",
+            "correct": true
+          },
+          {
+            "text": "4",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "id": 608002,
+        "question": "This is Question2",
+        "type": "single",
+        "time": 10,
+        "points": 1,
+        "url": "https://www.youtube.com/watch?v=ATHAD72SK0k",
+        "options": [
+          {
+            "text": "a",
+            "correct": false
+          },
+          {
+            "text": "b",
+            "correct": false
+          },
+          {
+            "text": "c",
+            "correct": false
+          }
+        ]
+      }
+    ],
+    "thumbnail": null,
+    "active": null,
+    "createdAt": "2023-04-14T00:12:52.232Z"
+  }
+  

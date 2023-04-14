@@ -10,6 +10,7 @@ function Dashboard ({ token }) {
   const [newQuizName, setNewQuizName] = React.useState('');
   // const [questions, setQuestions] = React.useState([])
   const navigate = useNavigate();
+  const fileInputRef = React.createRef();
 
   async function fetchAllQuizzes () {
     const response = await fetch('http://localhost:5005/admin/quiz', {
@@ -65,6 +66,38 @@ function Dashboard ({ token }) {
     await fetchAllQuizzes();
   }
 
+  async function updateQuizWithJson (quizId, jsonData) {
+    // Replace the URL with your backend update URL
+    await fetch(`http://localhost:5005/admin/quiz/${quizId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(jsonData),
+    });
+    // Refresh the quizzes after updating
+    await fetchAllQuizzes();
+  }
+
+  async function handleFileUpload (e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const jsonData = JSON.parse(event.target.result);
+          const quizId = fileInputRef.current.dataset.quizId;
+          // Validate the data structure here
+          await updateQuizWithJson(quizId, jsonData);
+        } catch (error) {
+          console.error('Error reading JSON file:', error);
+        }
+      };
+      reader.readAsText(file);
+    }
+  }
+
   async function editGame (id) {
     // Implement the navigation or functionality to edit the game
     navigate(`/editgame/${id}`);
@@ -73,6 +106,12 @@ function Dashboard ({ token }) {
   React.useEffect(() => {
     fetchAllQuizzes();
   }, [newGameShow, token]);
+
+  function handleFileUploadClick (e, quizId) {
+    e.preventDefault();
+    fileInputRef.current.dataset.quizId = quizId;
+    fileInputRef.current.click();
+  }
 
   // console.log(quizzes);
   return (
@@ -121,6 +160,14 @@ function Dashboard ({ token }) {
                     >
                       Delete
                     </Button>
+                    <Button onClick={(e) => handleFileUploadClick(e, quiz.id)}>Edit Game with JSON file</Button>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: 'none' }}
+                      accept=".json"
+                      onChange={handleFileUpload}
+                    />
                   </>
                 }
               </Card>

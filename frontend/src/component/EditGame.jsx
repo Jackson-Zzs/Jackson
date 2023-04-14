@@ -186,16 +186,18 @@ function EditGame ({ token }) {
           </Button>
         </div>
       ))}
-      <Button onClick={updateQuiz}>Update Quiz</Button>
+
       <Button
         onClick={() => {
           setAddQuestionModalVisible(true);
         }}
-        style={{ marginLeft: '8px' }}
+        style={{ marginLeft: '20px' }}
       >
         Add Questions
       </Button>
-
+      <br /><br />
+      <Button onClick={updateQuiz}>Update Quiz</Button>
+      <Button onClick={() => navigate('/dashboard')} style={{ marginLeft: '10px' }}>Back to Dashboard</Button>
       <Modal
         title="Add Question"
         open={addQuestionModalVisible}
