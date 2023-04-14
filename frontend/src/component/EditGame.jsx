@@ -117,6 +117,7 @@ function EditGame ({ token }) {
       <br />
       <input type="file" accept="image/*" onChange={handleImageChange} />
       <div>
+      Update Image
       {imageUrl && (
         <img src={imageUrl} alt="preview" style={{ width: '50%', height: '50%', objectFit: 'cover' }} />
       )}
@@ -129,6 +130,25 @@ function EditGame ({ token }) {
           <p>
             {index + 1}. {question.question}
           </p>
+          <p>
+            {question.url && (
+              <>
+                Related Link:{' '}
+                <a
+                  href={
+                    question.url.startsWith('http://') || question.url.startsWith('https://')
+                      ? question.url
+                      : 'http://' + question.url
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {question.url}
+                </a>
+              </>
+            )}
+          </p>
+
           <ul>
             {question.options.map((option, i) => (
               <li key={i}>{option.text}</li>
