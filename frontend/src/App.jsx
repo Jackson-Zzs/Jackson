@@ -8,6 +8,7 @@ import LogOut from './component/LogOut';
 import EditGame from './component/EditGame';
 import EditQuestion from './component/EditQuestion';
 import GameResults from './component/GameResults';
+import Play from './component/Play';
 
 function Main () {
   const [token, setToken] = React.useState(null);
@@ -53,6 +54,7 @@ function Main () {
         <Route path="/editgame/:gameid" element={<EditGame token={token} />} />
         <Route path="/editquestion/game/:gameid/question/:questionid" element={<EditQuestion token={token} />} />
         <Route path="/results/:sessionid" element={<GameResults token={token} />} />
+        <Route path="/play" element={<Play />} />
       </Routes>
     </>
   );
