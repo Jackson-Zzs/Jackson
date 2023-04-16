@@ -9,7 +9,8 @@ import EditGame from './component/EditGame';
 import EditQuestion from './component/EditQuestion';
 
 function Main () {
-  const [token, setToken] = React.useState(null);
+  const storedToken = localStorage.getItem('token') || '';
+  const [token, setToken] = React.useState(storedToken);
   const navigate = useNavigate();
   // console.log(token);
 
@@ -31,10 +32,16 @@ function Main () {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<LogIn onSuccess={manageToken} />} />
-        <Route path="/register" element={<Register onSuccess={manageToken} />} />
+        <Route
+          path="/register"
+          element={<Register onSuccess={manageToken} />}
+        />
         <Route path="/dashboard" element={<Dashboard token={token} />} />
         <Route path="/editgame/:gameid" element={<EditGame token={token} />} />
-        <Route path="/editquestion/game/:gameid/question/:questionid" element={<EditQuestion token={token} />} />
+        <Route
+          path="/editquestion/game/:gameid/question/:questionid"
+          element={<EditQuestion token={token} />}
+        />
       </Routes>
     </>
   );

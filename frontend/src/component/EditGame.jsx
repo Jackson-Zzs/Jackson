@@ -114,10 +114,9 @@ function EditGame ({ token }) {
         onChange={(e) => setQuiz({ ...quiz, name: e.target.value })}
       />
       <br />
-      <br />
+      <h4>Update Thumbnail</h4>
       <input type="file" accept="image/*" onChange={handleImageChange} />
       <div>
-      Update Image
       {imageUrl && (
         <img src={imageUrl} alt="preview" style={{ width: '50%', height: '50%', objectFit: 'cover' }} />
       )}
@@ -159,6 +158,7 @@ function EditGame ({ token }) {
               console.log(question);
               navigate(`/editquestion/game/${gameid}/question/${question.id}`);
             }}
+            style={{ backgroundColor: '#E9F6EF', color: 'black' }}
           >
             Edit Question
           </Button>
@@ -181,8 +181,9 @@ function EditGame ({ token }) {
               message.success('Question deleted successfully!');
             }}
             style={{ marginLeft: '8px' }}
+            danger
           >
-            Delete
+            Delete Question
           </Button>
         </div>
       ))}
@@ -191,13 +192,19 @@ function EditGame ({ token }) {
         onClick={() => {
           setAddQuestionModalVisible(true);
         }}
-        style={{ marginLeft: '20px' }}
+        style={{ backgroundColor: '#1677ff', color: 'white' }}
       >
-        Add Questions
+        Add Question
       </Button>
       <br /><br />
-      <Button onClick={updateQuiz}>Update Quiz</Button>
-      <Button onClick={() => navigate('/dashboard')} style={{ marginLeft: '10px' }}>Back to Dashboard</Button>
+      <Button
+        onClick={updateQuiz}
+        style={{ backgroundColor: '#1677ff', color: 'white' }}
+        >Update Quiz</Button>
+      <Button
+        onClick={() => navigate('/dashboard')}
+        style={{ marginLeft: '10px', backgroundColor: '#1677ff', color: 'white' }}
+        >Back to Dashboard</Button>
       <Modal
         title="Add Question"
         open={addQuestionModalVisible}

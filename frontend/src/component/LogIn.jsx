@@ -54,7 +54,7 @@ function LogIn ({ onSuccess }) {
           </Form.Item>
           <Form.Item>
             <Button type="primary" onClick={jumpToRegister}>
-              Go Register
+              Register
             </Button>
           </Form.Item>
         </Form>

@@ -116,9 +116,12 @@ function Dashboard ({ token }) {
   // console.log(quizzes);
   return (
     <>
-      <h1>Dashboard</h1>
+      <h1>Welcome to Dashboard</h1>
       <hr />
-      <Button onClick={() => setNewGameShow(!newGameShow)}>
+      <Button
+        onClick={() => setNewGameShow(!newGameShow)}
+        style={{ backgroundColor: '#1677ff', color: 'white' }}
+        >
         {newGameShow ? 'Wanna Hide Creating' : 'Wanna Create'} New Game
       </Button>
       {newGameShow && (
@@ -135,7 +138,10 @@ function Dashboard ({ token }) {
           />
           <br />
           <br />
-          <Button onClick={createNewGame}>Create new game</Button>
+          <Button
+            onClick={createNewGame}
+            style={{ backgroundColor: '#1677ff', color: 'white' }}
+            >Create new game</Button>
         </>
       )}
       <br />
@@ -153,14 +159,21 @@ function Dashboard ({ token }) {
                 <p>ID: {quiz.id}</p>
                 {
                   <>
-                    <Button onClick={() => editGame(quiz.id)}>Edit Game</Button>
+                    <Button
+                      onClick={() => editGame(quiz.id)}
+                      style={{ backgroundColor: '#E9F6EF', color: 'black' }}
+                      >Edit Game</Button>
                     <Button
                       onClick={() => deleteGame(quiz.id)}
                       style={{ marginLeft: '20px' }}
+                      danger
                     >
                       Delete
                     </Button>
-                    <Button onClick={(e) => handleFileUploadClick(e, quiz.id)}>Edit Game with JSON file</Button>
+                    <Button
+                      onClick={(e) => handleFileUploadClick(e, quiz.id)}
+                      style={{ backgroundColor: '#E9F6EF', color: 'black' }}
+                      >Edit Game with JSON file</Button>
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -174,7 +187,6 @@ function Dashboard ({ token }) {
             </Col>
           ))}
       </Row>
-
     </>
   );
 }
