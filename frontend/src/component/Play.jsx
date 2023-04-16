@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Typography, Form, Input, Button } from 'antd';
 
 const { Title } = Typography;
 
 function Play () {
+  const { sessionid } = useParams();
+
+  const location = useLocation();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [gameId, setGameId] = useState('');
+  const [doneURL, setDoneURL] = useState(false);
+  const [defaultGameId, setDefaultGameId] = useState(null);
+
+  if (!doneURL && location.pathname.includes('/play/id/')) {
+    setGameId(sessionid);
+    setDefaultGameId(sessionid);
+
+    setDoneURL(true);
+  }
 
   async function joinSession () {
     const response = await fetch(`http://localhost:5005/play/join/${gameId}`, {
@@ -38,7 +50,7 @@ function Play () {
       return;
     }
 
-    navigate(`/game/${gameId}`);
+    navigate('/game');
   }
 
   return (
@@ -58,7 +70,7 @@ function Play () {
         name="gameid"
         rules={[{ required: true, message: 'Please input a session id!' }]}
       >
-        <Input type="number" value={gameId} onChange={e => setGameId(e.target.value)}/>
+        <Input type="number" value={gameId} defaultValue={defaultGameId} onChange={e => setGameId(e.target.value)}/>
       </Form.Item>
       <Form.Item>
         <Button type="primary" disabled={!gameId || !username} onClick={gotoGame}>

@@ -124,7 +124,7 @@ function GameResults ({ token }) {
         return 0.0;
       }
 
-      return time / numAnswers[index];
+      return time / (numAnswers[index] * 1000);
     });
 
     return {

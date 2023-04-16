@@ -1,3 +1,5 @@
+import e from "express";
+
 /*
  For a given data structure of a question, produce another
  object that doesn't contain any important meta data (e.g. the answer)
@@ -5,7 +7,11 @@
 */
 export const quizQuestionPublicReturn = question => {
   console.log('See question: ', question);
-  return question;
+
+  const newQuestion = { ...question };
+  newQuestion.options = question.options.map(({ text }) => text);
+
+  return newQuestion;
 };
 
 /*
@@ -13,9 +19,13 @@ export const quizQuestionPublicReturn = question => {
  the correct answers (minimum 1).
 */
 export const quizQuestionGetCorrectAnswers = question => {
-  return [
-    123,
-  ]; // For a single answer
+  return question.options.reduce((arr, option, i) => {
+    if (option.correct === true) {
+      arr.push(i);
+    }
+
+    return arr;
+  }, []);
 };
 
 /*
@@ -23,11 +33,7 @@ export const quizQuestionGetCorrectAnswers = question => {
  all of the answers, correct or incorrect.
 */
 export const quizQuestionGetAnswers = question => {
-  return [
-    123,
-    456,
-    678,
-  ]; // For a single answer
+  return Array.from(Array(question.options.length).keys());
 };
 
 /*
@@ -35,5 +41,5 @@ export const quizQuestionGetAnswers = question => {
  of the question once it starts. (Seconds)
 */
 export const quizQuestionGetDuration = question => {
-  return 10;
+  return question.time;
 };

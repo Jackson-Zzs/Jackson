@@ -128,7 +128,11 @@ function Dashboard ({ token }) {
         break;
       }
       case 'copy-link': {
-        copyToClipboard(`${window.location.origin}/results/${quiz.active}`)
+        copyToClipboard(`${window.location.origin}/play/id/${quiz.active}`)
+        break;
+      }
+      case 'goto-results': {
+        navigate(`/results/${quiz.active}`);
         break;
       }
       case 'delete': {
@@ -155,6 +159,11 @@ function Dashboard ({ token }) {
       actions.splice(1, 0, {
         key: 'copy-link',
         label: 'Copy Link'
+      });
+
+      actions.splice(2, 0, {
+        key: 'goto-results',
+        label: 'Controls and Results'
       });
     }
 
