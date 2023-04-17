@@ -135,6 +135,10 @@ function Dashboard ({ token }) {
         navigate(`/results/${quiz.active}`);
         break;
       }
+      case 'view-old-sessions': {
+        navigate(`/previous/${quiz.id}`);
+        break;
+      }
       case 'delete': {
         deleteGame(quiz.id);
         break;
@@ -149,6 +153,10 @@ function Dashboard ({ token }) {
         label: 'Edit Game'
       },
       {
+        key: 'view-old-sessions',
+        label: 'View Old Sessions'
+      },
+      {
         key: 'Delete',
         label: 'Delete',
         danger: true
@@ -156,12 +164,12 @@ function Dashboard ({ token }) {
     ];
 
     if (quiz.active !== null) {
-      actions.splice(1, 0, {
+      actions.splice(2, 0, {
         key: 'copy-link',
         label: 'Copy Link'
       });
 
-      actions.splice(2, 0, {
+      actions.splice(3, 0, {
         key: 'goto-results',
         label: 'Controls and Results'
       });

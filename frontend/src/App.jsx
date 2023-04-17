@@ -8,6 +8,7 @@ import LogOut from './component/LogOut';
 import EditGame from './component/EditGame';
 import EditQuestion from './component/EditQuestion';
 import GameResults from './component/GameResults';
+import Previous from './component/Previous';
 import Play from './component/Play';
 import Game from './component/Game';
 
@@ -55,6 +56,7 @@ function Main () {
         <Route path="/editgame/:gameid" element={<EditGame token={token} />} />
         <Route path="/editquestion/game/:gameid/question/:questionid" element={<EditQuestion token={token} />} />
         <Route path="/results/:sessionid" element={<GameResults token={token} />} />
+        <Route path="/previous/:gameid" element={<Previous token={token} />} />
         <Route path="/play/id/:sessionid" element={<Play />} />
         <Route path="/play" element={<Play />} />
         <Route path="/game" element={<Game />} />

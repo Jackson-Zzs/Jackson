@@ -112,16 +112,6 @@ function Game () {
     }
   }
 
-  /*
-  async function contentIsImage (url) {
-    const response = await fetch(url, {
-      method: 'HEAD',
-    });
-
-    return response.headers.get('Content-Type').includes('image');
-  }
-  */
-
   // Setup polling
   useEffect(() => {
     if (results) {
@@ -163,7 +153,10 @@ function Game () {
       }
     ]
 
-    return <Table dataSource={tableData} columns={columns} />
+    return <>
+      Points are calculated as <code>min(maxPoints, maxPoints * (maxTime / timeTaken - 1) / 9)</code>
+      <Table dataSource={tableData} columns={columns} />
+    </>;
   }
 
   if (!question) {
@@ -193,15 +186,35 @@ function Game () {
 
   const timeleftText = answers ? 'Answer:' : `${timeleft} seconds left`;
 
-  let embed = null;
-  if (question.url) {
-    embed = <iframe src={question.url}/>
+  const getYoutubeID = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+
+    return (match && match[2].length === 11)
+      ? match[2]
+      : null;
   }
 
-  // TODO: EMBED IMAGE/VIDEO
+  const getEmbed = () => {
+    if (question.url) {
+      const youtubeID = getYoutubeID(question.url);
+      if (youtubeID) {
+        return <iframe
+        src={`http://www.youtube.com/embed/${youtubeID}`}
+        sandbox='allow-same-origin allow-forms allow-popups allow-scripts allow-presentation'
+        title='Youtube Player'
+        />
+      } else {
+        return <img src={question.url}/>
+      }
+    }
+
+    return null;
+  }
+
   return (
     <div>
-      {embed}
+      {getEmbed()}
       <br/>
       {question.question}
       <br/>

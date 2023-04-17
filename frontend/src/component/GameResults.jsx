@@ -77,6 +77,11 @@ function GameResults ({ token }) {
     setQuiz(fullQuiz);
   }
 
+  const getScore = (maxPoints, maxTime, timeTaken) => {
+    // First 10% = max points, then exponential-ish decay until 0 at timeTaken
+    return Math.min(maxPoints, maxPoints * (maxTime / timeTaken - 1) / 9);
+  }
+
   const calculateScores = () => {
     /*
       Sorted by score
@@ -95,16 +100,19 @@ function GameResults ({ token }) {
       let totalScore = 0;
 
       user.answers.forEach((answer, index) => {
-        if (answer.correct) {
-          totalScore += quiz.questions[index].points;
-
-          numCorrect[index]++;
-        }
-
         const startTime = Date.parse(answer.questionStartedAt);
         const answerTime = Date.parse(answer.answeredAt);
 
-        totalTime[index] += answerTime - startTime;
+        const timeTaken = answerTime - startTime;
+
+        totalTime[index] += timeTaken;
+
+        if (answer.correct) {
+          const curQuestion = quiz.questions[index];
+          totalScore += getScore(curQuestion.points, curQuestion.time * 1000, timeTaken);
+
+          numCorrect[index]++;
+        }
 
         numAnswers[index]++;
       });
@@ -287,6 +295,7 @@ function GameResults ({ token }) {
 
     return (
     <div>
+        Points are calculated as <code>min(maxPoints, maxPoints * (maxTime / timeTaken - 1) / 9)</code>
         <Bar options={options} data={data} />
         <Table dataSource={tableData} columns={columns} />
     </div>

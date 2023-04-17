@@ -46,7 +46,7 @@ function Play () {
     const joined = await joinSession();
 
     if (!joined) {
-      // TODO: Error somehow
+      alert('Could not join session! Is the session ID correct?');
       return;
     }
 
