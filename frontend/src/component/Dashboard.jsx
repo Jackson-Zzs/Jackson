@@ -232,6 +232,14 @@ function Dashboard ({ token }) {
         open={toModalStart.has(quizId)}
         onOk={onClose}
         cancelButtonProps={{ style: { display: 'none' } }}
+        footer={[
+          <Button key="copy-link" onClick={() => copyToClipboard(`${window.location.origin}/play/id/${quiz.active}`)}>
+            Copy Link
+          </Button>,
+          <Button key="close" onClick={onClose} type="primary">
+            Close
+          </Button>
+        ]}
       >
       </Modal>
     );
