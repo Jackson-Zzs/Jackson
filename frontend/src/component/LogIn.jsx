@@ -32,7 +32,7 @@ function LogIn ({ onSuccess }) {
         console.log(data);
         navigate('/dashboard');
       } else {
-        alert('response not ok');
+        alert('Please enter the right email and password');
       }
     }
   }
