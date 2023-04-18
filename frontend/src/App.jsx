@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Welcome from './component/Welcome';
 import Register from './component/Register';
 import LogIn from './component/LogIn';
@@ -7,12 +7,32 @@ import Dashboard from './component/Dashboard';
 import LogOut from './component/LogOut';
 import EditGame from './component/EditGame';
 import EditQuestion from './component/EditQuestion';
+import GameResults from './component/GameResults';
+import Previous from './component/Previous';
+import Play from './component/Play';
+import Game from './component/Game';
 
 function Main () {
   const storedToken = localStorage.getItem('token') || '';
   const [token, setToken] = React.useState(storedToken);
   const navigate = useNavigate();
+  const location = useLocation();
   // console.log(token);
+
+  // Load token
+  useEffect(() => {
+    const loadedToken = localStorage.getItem('token');
+
+    setToken(loadedToken);
+
+    if (loadedToken) {
+      if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register') {
+        navigate('/dashboard');
+      }
+    } else if (!(location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register')) {
+      navigate('/');
+    }
+  }, [])
 
   const logout = () => {
     setToken(null);
@@ -42,6 +62,11 @@ function Main () {
           path="/editquestion/game/:gameid/question/:questionid"
           element={<EditQuestion token={token} />}
         />
+        <Route path="/results/:sessionid" element={<GameResults token={token} />} />
+        <Route path="/previous/:gameid" element={<Previous token={token} />} />
+        <Route path="/play/id/:sessionid" element={<Play />} />
+        <Route path="/play" element={<Play />} />
+        <Route path="/game" element={<Game />} />
       </Routes>
     </>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Input, Row, Col } from 'antd';
+import { Button, Card, Dropdown, Input, Row, Col, Space, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 function Dashboard ({ token }) {
@@ -8,6 +8,9 @@ function Dashboard ({ token }) {
   const [newGameShow, setNewGameShow] = React.useState(false);
   const [quizzes, setQuizzes] = React.useState([]);
   const [newQuizName, setNewQuizName] = React.useState('');
+  const [toModalStart, setToModalStart] = React.useState(new Set());
+  const [toModalEnd, setToModalEnd] = React.useState(new Set());
+
   // const [questions, setQuestions] = React.useState([])
   const navigate = useNavigate();
   const fileInputRef = React.createRef();
@@ -38,6 +41,16 @@ function Dashboard ({ token }) {
       })
     );
     setQuizzes(quizzesWithQuestionsCount);
+  }
+
+  const findQuiz = (id) => {
+    const filtered = quizzes.filter(quiz => quiz.id === id);
+
+    if (filtered.length <= 0) {
+      return null;
+    }
+
+    return filtered[0];
   }
 
   async function createNewGame () {
@@ -103,6 +116,32 @@ function Dashboard ({ token }) {
     navigate(`/editgame/${id}`);
   }
 
+  async function startGame (id) {
+    await fetch(`http://localhost:5005/admin/quiz/${id}/start`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    await fetchAllQuizzes();
+
+    setToModalStart(new Set([...toModalStart, id]));
+  }
+
+  async function endGame (quiz) {
+    await fetch(`http://localhost:5005/admin/quiz/${quiz.id}/end`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    await fetchAllQuizzes();
+
+    setToModalEnd(new Set([...toModalEnd, quiz.active]));
+  }
+
   React.useEffect(() => {
     fetchAllQuizzes();
   }, [newGameShow, token]);
@@ -114,6 +153,114 @@ function Dashboard ({ token }) {
   }
 
   // console.log(quizzes);
+  const copyToClipboard = async (text) => {
+    if ('clipboard' in navigator) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      document.execCommand('copy', true, text);
+    }
+  }
+
+  const handleActionClick = (key, quiz) => {
+    switch (key) {
+      case 'edit': {
+        editGame(quiz.id);
+        break;
+      }
+      case 'copy-link': {
+        copyToClipboard(`${window.location.origin}/play/id/${quiz.active}`)
+        break;
+      }
+      case 'goto-results': {
+        navigate(`/results/${quiz.active}`);
+        break;
+      }
+      case 'view-old-sessions': {
+        navigate(`/previous/${quiz.id}`);
+        break;
+      }
+      case 'delete': {
+        deleteGame(quiz.id);
+        break;
+      }
+    }
+  }
+
+  const generateGameActions = (quiz) => {
+    const actions = [
+      // {
+      //   key: 'edit',
+      //   label: 'Edit Game'
+      // },
+      {
+        key: 'view-old-sessions',
+        label: 'View Old Sessions'
+      },
+      // {
+      //   key: 'Delete',
+      //   label: 'Delete',
+      //   danger: true
+      // }
+    ];
+
+    if (quiz.active !== null) {
+      actions.splice(2, 0, {
+        key: 'copy-link',
+        label: 'Copy Link'
+      });
+
+      actions.splice(3, 0, {
+        key: 'goto-results',
+        label: 'Controls and Results'
+      });
+    }
+
+    return actions;
+  }
+
+  const startModals = [...toModalStart].map((quizId) => {
+    const quiz = findQuiz(quizId);
+
+    const onClose = () => {
+      toModalStart.delete(quizId);
+      setToModalStart(new Set(toModalStart));
+    }
+
+    return (
+      <Modal key={quizId}
+        title={`${quiz.name} session created at: ${quiz.active}`}
+        open={toModalStart.has(quizId)}
+        onOk={onClose}
+        cancelButtonProps={{ style: { display: 'none' } }}
+      >
+      </Modal>
+    );
+  });
+
+  const endModals = [...toModalEnd].map((sessionId) => {
+    const onClose = () => {
+      toModalEnd.delete(sessionId);
+      setToModalEnd(new Set(toModalEnd));
+    }
+
+    return (
+      <Modal key={sessionId}
+        title={`${sessionId} ended`}
+        open={toModalEnd.has(sessionId)}
+        okText={'Yes'}
+        onOk={() => {
+          onClose();
+
+          navigate(`/results/${sessionId}`);
+        }}
+        cancelText={'No'}
+        onCancel={onClose}
+      >
+        Would you like to view the results?
+      </Modal>
+    );
+  });
+
   return (
     <>
       <h1>Welcome to Dashboard</h1>
@@ -162,7 +309,9 @@ function Dashboard ({ token }) {
                     <Button
                       onClick={() => editGame(quiz.id)}
                       style={{ backgroundColor: '#E9F6EF', color: 'black' }}
-                      >Edit Game</Button>
+                    >
+                      Edit Game
+                    </Button>
                     <Button
                       onClick={() => deleteGame(quiz.id)}
                       style={{ marginLeft: '20px' }}
@@ -173,7 +322,9 @@ function Dashboard ({ token }) {
                     <Button
                       onClick={(e) => handleFileUploadClick(e, quiz.id)}
                       style={{ backgroundColor: '#E9F6EF', color: 'black' }}
-                      >Edit Game with JSON file</Button>
+                    >
+                      Edit Game with JSON file
+                    </Button>
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -183,10 +334,28 @@ function Dashboard ({ token }) {
                     />
                   </>
                 }
+                {
+                  <Space direction="horizontal">
+                    <Dropdown.Button
+                      onClick={() =>
+                        quiz.active === null ? startGame(quiz.id) : endGame(quiz)
+                      }
+                      type="primary"
+                      menu={{
+                        items: generateGameActions(quiz),
+                        onClick: (e) => handleActionClick(e.key, quiz),
+                      }}
+                    >
+                      {quiz.active === null ? 'Start Game' : 'End Game'}
+                    </Dropdown.Button>
+                  </Space>
+                }
               </Card>
             </Col>
           ))}
       </Row>
+      {startModals}
+      {endModals}
     </>
   );
 }
