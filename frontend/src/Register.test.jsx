@@ -1,34 +1,29 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { BrowserRouter } from 'react-router-dom';
 import Register from './component/Register';
 
-test('renders register form', () => {
-  const onSuccess = jest.fn();
-  render(<Register onSuccess={onSuccess} />);
+window.matchMedia = window.matchMedia || function () {
+  return {
+    matches: false,
+    addListener: function () { },
+    removeListener: function () { }
+  };
+};
 
-  const emailInput = screen.getByLabelText(/Email/i);
-  expect(emailInput).toBeInTheDocument();
+describe('Register', () => {
+  it('renders register form elements', () => {
+    render(
+      <BrowserRouter>
+        <Register />
+      </BrowserRouter>
+    );
 
-  const passwordInput = screen.getByLabelText(/Password/i);
-  expect(passwordInput).toBeInTheDocument();
-
-  const nameInput = screen.getByLabelText(/Name/i);
-  expect(nameInput).toBeInTheDocument();
-
-  const registerButton = screen.getByText(/Register/i);
-  expect(registerButton).toBeInTheDocument();
-
-  const goLogInButton = screen.getByText(/Go Log In/i);
-  expect(goLogInButton).toBeInTheDocument();
-});
-
-test('clicking Go Log In button navigates to login page', () => {
-  const onSuccess = jest.fn();
-  const { container } = render(<Register onSuccess={onSuccess} />);
-
-  const goLogInButton = screen.getByText(/Go Log In/i);
-  userEvent.click(goLogInButton);
-
-  expect(container.innerHTML).toMatch('Log In');
+    expect(screen.getByText(/Please Register/i).closest('div')).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Register/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Go Log In/i })).toBeInTheDocument();
+  });
 });

@@ -39,12 +39,12 @@ function LogIn ({ onSuccess }) {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Card title="Log In" style={{ width: 300 }}>
+      <Card title="Please Log In" style={{ width: 300 }}>
         <Form>
-          <Form.Item label="Email">
+          <Form.Item label="Email" name="email">
             <Input value={email} onChange={(e) => setEmail(e.target.value)} />
           </Form.Item>
-          <Form.Item label="Password">
+          <Form.Item label="Password" name="password">
             <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
           </Form.Item>
           <Form.Item>

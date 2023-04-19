@@ -1,23 +1,28 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import LogIn from './component/LogIn';
 
-test('renders login form', () => {
-  const onSuccessMock = jest.fn();
-  render(<LogIn onSuccess={onSuccessMock} />);
+window.matchMedia = window.matchMedia || function () {
+  return {
+    matches: false,
+    addListener: function () { },
+    removeListener: function () { }
+  };
+};
 
-  // 检查Email和Password输入框是否存在
-  const emailInput = screen.getByLabelText(/Email/i);
-  expect(emailInput).toBeInTheDocument();
+describe('LogIn', () => {
+  it('renders login form elements', () => {
+    render(
+      <BrowserRouter>
+        <LogIn />
+      </BrowserRouter>
+    );
 
-  const passwordInput = screen.getByLabelText(/Password/i);
-  expect(passwordInput).toBeInTheDocument();
-
-  // 检查登录按钮是否存在
-  const loginButton = screen.getByText(/Log In/i);
-  expect(loginButton).toBeInTheDocument();
-
-  // 检查注册按钮是否存在
-  const registerButton = screen.getByText(/Register/i);
-  expect(registerButton).toBeInTheDocument();
+    expect(screen.getByText(/Please Log In/i).closest('div')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Log In/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Register/i })).toBeInTheDocument();
+  });
 });
