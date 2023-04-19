@@ -41,11 +41,11 @@ function LogIn ({ onSuccess }) {
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <Card title="Log In" style={{ width: 300 }}>
         <Form name="loginForm" aria-label="login form">
-          <Form.Item label="Email">
+          <Form.Item label="Email" name="email">
             <Input name="email" value={email} onChange={(e) => setEmail(e.target.value)}
             id="email" aria-label="email"/>
           </Form.Item>
-          <Form.Item label="Password">
+          <Form.Item label="Password" name="password">
             <Input.Password name="password" value={password} onChange={(e) => setPassword(e.target.value)}
             id="password" aria-label="password" />
           </Form.Item>
