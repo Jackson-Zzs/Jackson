@@ -155,6 +155,7 @@ test('full register navigates correctly', async () => {
   const { router, onSuccessMock } = setup();
 
   global.fetch = jest.fn(async () => {
+    console.log('HIIIIIIII\n\n\n\n\n\n\n\n\nHIIIIIIIII');
     return {
       json: async () => {
         return {
@@ -167,15 +168,15 @@ test('full register navigates correctly', async () => {
   const emailInput = screen.getByLabelText(/Email/i);
   const passwordInput = screen.getByLabelText(/Password/i);
   const nameInput = screen.getByLabelText(/Name/i);
-  const loginButton = screen.getByRole('button', {
-    name: /login button/i
+  const registerButton = screen.getByRole('button', {
+    name: /register button/i
   });
 
   userEvent.type(emailInput, 'validemail@validemail.com');
   userEvent.type(passwordInput, 'rightpassword');
   userEvent.type(nameInput, 'Areal Person');
 
-  userEvent.click(loginButton);
+  userEvent.click(registerButton);
 
   await waitFor(() => expect(onSuccessMock).toHaveBeenCalled());
   expect(onSuccessMock).toHaveBeenCalledWith('REAL_TOKEN');

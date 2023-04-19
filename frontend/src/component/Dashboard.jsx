@@ -256,6 +256,8 @@ function Dashboard ({ token }) {
         }}
         cancelText={'No'}
         onCancel={onClose}
+        okButtonProps={{ 'aria-label': 'view results modal button' }}
+        cancelButtonProps={{ 'aria-label': 'do not view results modal button' }}
       >
         Would you like to view the results?
       </Modal>
@@ -337,7 +339,7 @@ function Dashboard ({ token }) {
                 }
                 {
                   <Space direction="horizontal">
-                    <Dropdown.Button
+                    <Dropdown.Button aria-label={`${quiz.name} start stop button`}
                       onClick={() =>
                         quiz.active === null ? startGame(quiz.id) : endGame(quiz)
                       }

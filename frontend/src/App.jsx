@@ -12,12 +12,15 @@ import Previous from './component/Previous';
 import Play from './component/Play';
 import Game from './component/Game';
 
-function Main () {
+export let globalLocation;
+
+export const RoutesApp = () => {
   const storedToken = localStorage.getItem('token') || '';
   const [token, setToken] = React.useState(storedToken);
   const navigate = useNavigate();
   const location = useLocation();
-  // console.log(token);
+
+  globalLocation = location;
 
   // Load token
   useEffect(() => {
@@ -75,7 +78,7 @@ function Main () {
 function App () {
   return (
     <BrowserRouter>
-      <Main />
+      <RoutesApp />
     </BrowserRouter>
   );
 }
