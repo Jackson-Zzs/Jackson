@@ -154,8 +154,8 @@ function Game () {
     ]
 
     return <>
-      Points are calculated as <code>min(maxPoints, maxPoints * (maxTime / timeTaken - 1) / 9)</code>
-      <Table dataSource={tableData} columns={columns} />
+      <p aria-label="points explanation">Points are calculated as <code>min(maxPoints, maxPoints * (maxTime / timeTaken - 1) / 9)</code></p>
+      <Table aria-label="question performance" dataSource={tableData} columns={columns} />
     </>;
   }
 
@@ -200,12 +200,13 @@ function Game () {
       const youtubeID = getYoutubeID(question.url);
       if (youtubeID) {
         return <iframe
+        aria-label="question video"
         src={`http://www.youtube.com/embed/${youtubeID}`}
         sandbox='allow-same-origin allow-forms allow-popups allow-scripts allow-presentation'
         title='Youtube Player'
         />
       } else {
-        return <img src={question.url}/>
+        return <img aria-label="question image" src={question.url}/>
       }
     }
 
@@ -216,13 +217,13 @@ function Game () {
     <div>
       {getEmbed()}
       <br/>
-      {question.question}
+      <p aria-label="question text">{question.question}</p>
       <br/>
-      {timeleftText}
+      <p aria-label="time left">{timeleftText}</p>
       <Form>
         {answerGroup}
         <Form.Item>
-          <Button onClick={submitAnswers} disabled={disallowAnswers}>Submit</Button>
+          <Button aria-label="submit button" onClick={submitAnswers} disabled={disallowAnswers}>Submit</Button>
         </Form.Item>
       </Form>
   </div>

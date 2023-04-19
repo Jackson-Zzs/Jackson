@@ -21,7 +21,7 @@ function LogOut ({ onLogout, token }) {
     }
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return <button aria-label="log out button" onClick={handleLogout}>Logout</button>;
 }
 
 export default LogOut;

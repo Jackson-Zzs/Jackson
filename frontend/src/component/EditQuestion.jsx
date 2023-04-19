@@ -134,7 +134,7 @@ function EditQuestion ({ token }) {
           name="question"
           rules={[{ required: true, message: 'Please input the question!' }]}
         >
-          <Input />
+          <Input name="question" aria-label="question"/>
         </Form.Item>
 
         <Form.Item
@@ -142,7 +142,7 @@ function EditQuestion ({ token }) {
           name="type"
           rules={[{ required: true, message: 'Please select the question type!' }]}
         >
-          <Select onChange={handleTypeChange}>
+          <Select name="type" aria-label="type" onChange={handleTypeChange}>
             <Option value="single">Single Choice</Option>
             <Option value="multiple">Multiple Choice</Option>
           </Select>
@@ -153,7 +153,7 @@ function EditQuestion ({ token }) {
           name="time"
           rules={[{ required: true, message: 'Please input the time limit!' }]}
         >
-          <InputNumber min={1} />
+          <InputNumber name="time" aria-label="time limit" min={1} />
         </Form.Item>
 
         <Form.Item
@@ -161,11 +161,11 @@ function EditQuestion ({ token }) {
             name="points"
             rules={[{ required: true, message: 'Please input the points for this question!' }]}
         >
-            <InputNumber min={1} />
+            <InputNumber name="points" aria-label="points" min={1} />
         </Form.Item>
 
         <Form.Item label="URL (optional)" name="url">
-            <Input />
+            <Input name="url" aria-label="url"/>
         </Form.Item>
         <h2>Answers</h2>
         <Form.List name="options">
@@ -182,7 +182,7 @@ function EditQuestion ({ token }) {
                       { required: true, message: `Please input option ${index + 1}!` },
                     ]}
                   >
-                    <Input />
+                    <Input name={[field.name, 'text']} aria-label={`question ${index + 1}`}/>
                   </Form.Item>
                   <Form.Item
                     name={[field.name, 'correct']}
@@ -190,7 +190,7 @@ function EditQuestion ({ token }) {
                     initialValue={question.options[index].correct}
                     noStyle
                   >
-                    <Checkbox onChange={(e) => handleCheckboxChange(e, index)}>
+                    <Checkbox onChange={(e) => handleCheckboxChange(e, index)} aria-label={`correct option ${index + 1}`}>
                     {/* <Checkbox> */}
                       Correct Option
                     </Checkbox>
@@ -201,7 +201,7 @@ function EditQuestion ({ token }) {
           )}
         </Form.List>
 
-        <Button type="primary" onClick={updateQuestion}>
+        <Button type="primary" onClick={updateQuestion} aria-label="update button">
             Update Question
         </Button>
         </Form>

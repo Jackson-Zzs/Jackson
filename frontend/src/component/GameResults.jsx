@@ -194,12 +194,12 @@ function GameResults ({ token }) {
   if (session.results.active) {
     return (
     <div>
-      <Space direction='horizontal' onClick={advanceSession}>
-        <Button type='primary'>
+      <Space direction='horizontal'>
+        <Button type='primary' aria-label="advance button" onClick={advanceSession}>
           Advance ({session.results.position})
         </Button>
 
-        <Button danger type='primary' onClick={endSession}>
+        <Button danger type='primary' aria-label="end button" onClick={endSession}>
           Stop
         </Button>
       </Space>
@@ -295,9 +295,9 @@ function GameResults ({ token }) {
 
     return (
     <div>
-        Points are calculated as <code>min(maxPoints, maxPoints * (maxTime / timeTaken - 1) / 9)</code>
-        <Bar options={options} data={data} />
-        <Table dataSource={tableData} columns={columns} />
+        <p aria-label="points explanation">Points are calculated as <code>min(maxPoints, maxPoints * (maxTime / timeTaken - 1) / 9)</code></p>
+        <Bar aria-label="results graph" options={options} data={data} />
+        <Table aria-label="top players" dataSource={tableData} columns={columns} />
     </div>
     );
   }

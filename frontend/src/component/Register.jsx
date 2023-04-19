@@ -15,7 +15,7 @@ function Register ({ onSuccess }) {
   async function register () {
     if (!email || !password || !name) {
       alert('email or password or name should not be empty');
-    } else if (email || password || name) {
+    } else {
       const response = await fetch('http://localhost:5005/admin/auth/register', {
         method: 'POST',
         headers: {
@@ -37,23 +37,28 @@ function Register ({ onSuccess }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <Card title="Register" style={{ width: 300 }}>
-        <Form>
+        <Form name="registerForm" aria-label="register form">
           <Form.Item label="Email">
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input name="email" value={email} onChange={(e) => setEmail(e.target.value)}
+            id="email" aria-label="email"/>
           </Form.Item>
           <Form.Item label="Password">
-            <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input.Password name="password" value={password} onChange={(e) => setPassword(e.target.value)}
+            id="password" aria-label="password"/>
           </Form.Item>
           <Form.Item label="Name">
-            <Input value={name} onChange={(e) => setName(e.target.value)} />
+            <Input name="name" value={name} onChange={(e) => setName(e.target.value)}
+            id="name" aria-label="name"/>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" onClick={register}>
+            <Button type="primary" onClick={register}
+            aria-label="register button">
               Register
             </Button>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" onClick={jumpToLogIn}>
+            <Button type="primary" onClick={jumpToLogIn}
+            aria-label="login button">
               Go Log In
             </Button>
           </Form.Item>

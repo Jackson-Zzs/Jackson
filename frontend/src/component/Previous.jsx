@@ -39,7 +39,7 @@ function Previous ({ token }) {
   const oldSessions = quiz.oldSessions.map((sessionId) => {
     return <Space direction="horizontal" key={sessionId}>
         {sessionId}
-        <Button onClick={() => navigate(`/results/${sessionId}`)}>View Results</Button>
+        <Button aria-label={`session ${sessionId} results button`} onClick={() => navigate(`/results/${sessionId}`)}>View Results</Button>
     </Space>
   });
 

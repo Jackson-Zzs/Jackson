@@ -40,20 +40,24 @@ function LogIn ({ onSuccess }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <Card title="Log In" style={{ width: 300 }}>
-        <Form>
+        <Form name="loginForm" aria-label="login form">
           <Form.Item label="Email">
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input name="email" value={email} onChange={(e) => setEmail(e.target.value)}
+            id="email" aria-label="email"/>
           </Form.Item>
           <Form.Item label="Password">
-            <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input.Password name="password" value={password} onChange={(e) => setPassword(e.target.value)}
+            id="password" aria-label="password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" onClick={login}>
+            <Button type="primary" onClick={login}
+            aria-label="login button">
               Log In
             </Button>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" onClick={jumpToRegister}>
+            <Button type="primary" onClick={jumpToRegister}
+            aria-label="register button">
               Register
             </Button>
           </Form.Item>

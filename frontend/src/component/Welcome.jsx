@@ -36,11 +36,11 @@ function Welcome () {
       <Content style={welcomeContentStyle}>
         <Row justify="center">
           <Col>
-            <Title>Welcome to Bigbrain</Title>
+            <Title aria-label="welcome text">Welcome to Bigbrain</Title>
             <br />
             <Row justify="center">
               <Col>
-                <Button type="primary" onClick={jumpToLogIn}>
+                <Button aria-label="login button" type="primary" onClick={jumpToLogIn}>
                   Go LogIn
                 </Button>
               </Col>
@@ -48,7 +48,7 @@ function Welcome () {
             <br />
             <Row justify="center">
               <Col>
-                <Button type="primary" onClick={jumpToRegister}>
+                <Button aria-label="register button" type="primary" onClick={jumpToRegister}>
                   Go Register
                 </Button>
               </Col>

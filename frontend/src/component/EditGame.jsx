@@ -109,13 +109,13 @@ function EditGame ({ token }) {
   return (
     <div>
       <h1>Edit Game: {quiz.name}</h1>
-      <Input
+      <Input aria-label="quiz name"
         value={quiz.name}
         onChange={(e) => setQuiz({ ...quiz, name: e.target.value })}
       />
       <br />
       <h4>Update Thumbnail</h4>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <input aria-label="quiz thumbnail" type="file" accept="image/*" onChange={handleImageChange} />
       <div>
       {imageUrl && (
         <img src={imageUrl} alt="preview" style={{ width: '50%', height: '50%', objectFit: 'cover' }} />
@@ -125,15 +125,15 @@ function EditGame ({ token }) {
       <br />
       <h2>Questions</h2>
       {quiz.questions && quiz.questions.map((question, index) => (
-        <div key={index} style={{ marginBottom: '16px' }}>
-          <p>
+        <div key={index} aria-label={`question ${index + 1}`} style={{ marginBottom: '16px' }}>
+          <p aria-label={`text ${index + 1}`}>
             {index + 1}. {question.question}
           </p>
           <p>
             {question.url && (
               <>
                 Related Link:{' '}
-                <a
+                <a aria-label={`url ${index + 1}`}
                   href={
                     question.url.startsWith('http://') || question.url.startsWith('https://')
                       ? question.url
@@ -148,12 +148,12 @@ function EditGame ({ token }) {
             )}
           </p>
 
-          <ul>
+          <ul aria-label={`question ${index + 1} options`}>
             {question.options.map((option, i) => (
-              <li key={i}>{option.text}</li>
+              <li aria-label={`question ${index + 1} option ${i + 1}`} key={i}>{option.text}</li>
             ))}
           </ul>
-          <Button
+          <Button aria-label={`edit question ${index + 1} button`}
             onClick={() => {
               console.log(question);
               navigate(`/editquestion/game/${gameid}/question/${question.id}`);
@@ -162,7 +162,7 @@ function EditGame ({ token }) {
           >
             Edit Question
           </Button>
-          <Button
+          <Button aria-label={`delete question ${index + 1} button`}
             onClick={async () => {
               const updatedQuestions = quiz.questions.filter((_, i) => i !== index);
               await fetch(`http://localhost:5005/admin/quiz/${gameid}`, {
@@ -188,7 +188,7 @@ function EditGame ({ token }) {
         </div>
       ))}
 
-      <Button
+      <Button aria-label="add question button"
         onClick={() => {
           setAddQuestionModalVisible(true);
         }}
@@ -197,11 +197,11 @@ function EditGame ({ token }) {
         Add Question
       </Button>
       <br /><br />
-      <Button
+      <Button aria-label="update quiz button"
         onClick={updateQuiz}
         style={{ backgroundColor: '#1677ff', color: 'white' }}
         >Update Quiz</Button>
-      <Button
+      <Button aria-label="dashboard button"
         onClick={() => navigate('/dashboard')}
         style={{ marginLeft: '10px', backgroundColor: '#1677ff', color: 'white' }}
         >Back to Dashboard</Button>
@@ -210,10 +210,10 @@ function EditGame ({ token }) {
         open={addQuestionModalVisible}
         onCancel={() => setAddQuestionModalVisible(false)}
         footer={[
-          <Button key="cancel" onClick={() => setAddQuestionModalVisible(false)}>
+          <Button aria-label="cancel editing question button" key="cancel" onClick={() => setAddQuestionModalVisible(false)}>
             Cancel
           </Button>,
-          <Button key="submit" type="primary" onClick={addQuestion}>
+          <Button aria-label="submit question button" key="submit" type="primary" onClick={addQuestion}>
             Add Question
           </Button>,
         ]}
@@ -224,33 +224,33 @@ function EditGame ({ token }) {
             name="question"
             rules={[{ required: true, message: 'Please input the question!' }]}
           >
-            <Input />
+            <Input name="question" aria-label="question"/>
           </Form.Item>
           <Form.Item
             label="Option 1"
             name="option1"
             rules={[{ required: true, message: 'Please input the first option!' }]}
           >
-            <Input />
+            <Input name="option1" aria-label="option1"/>
           </Form.Item>
           <Form.Item
             label="Option 2"
             name="option2"
             rules={[{ required: true, message: 'Please input the second option!' }]}
           >
-            <Input />
+            <Input name="option2" aria-label="option2"/>
           </Form.Item>
           <Form.Item label="Option 3" name="option3">
-            <Input />
+            <Input name="option3" aria-label="option3"/>
           </Form.Item>
           <Form.Item label="Option 4" name="option4">
-            <Input />
+            <Input name="option4" aria-label="option4"/>
           </Form.Item>
           <Form.Item label="Option 5" name="option5">
-            <Input />
+            <Input name="option5" aria-label="option5"/>
           </Form.Item>
           <Form.Item label="Option 6" name="option6">
-            <Input />
+            <Input name="option6" aria-label="option6"/>
           </Form.Item>
         </Form>
       </Modal>

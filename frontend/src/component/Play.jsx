@@ -63,17 +63,20 @@ function Play () {
         name="name"
         rules={[{ required: true, message: 'Please input a name!' }]}
       >
-        <Input value={username} onChange={e => setUsername(e.target.value)} />
+        <Input name="name" value={username} onChange={e => setUsername(e.target.value)}
+        aria-label="name"/>
       </Form.Item>
       <Form.Item
         label="Game ID"
         name="gameid"
         rules={[{ required: true, message: 'Please input a session id!' }]}
       >
-        <Input type="number" value={gameId} defaultValue={defaultGameId} onChange={e => setGameId(e.target.value)}/>
+        <Input name="gameid" type="number" value={gameId} defaultValue={defaultGameId} onChange={e => setGameId(e.target.value)}
+        aria-label="gameid"/>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" disabled={!gameId || !username} onClick={gotoGame}>
+        <Button type="primary" disabled={!gameId || !username} onClick={gotoGame}
+        aria-label="join button">
           Join
         </Button>
       </Form.Item>

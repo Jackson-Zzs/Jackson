@@ -188,28 +188,19 @@ function Dashboard ({ token }) {
 
   const generateGameActions = (quiz) => {
     const actions = [
-      // {
-      //   key: 'edit',
-      //   label: 'Edit Game'
-      // },
       {
         key: 'view-old-sessions',
         label: 'View Old Sessions'
       },
-      // {
-      //   key: 'Delete',
-      //   label: 'Delete',
-      //   danger: true
-      // }
     ];
 
     if (quiz.active !== null) {
-      actions.splice(2, 0, {
+      actions.push({
         key: 'copy-link',
         label: 'Copy Link'
       });
 
-      actions.splice(3, 0, {
+      actions.push({
         key: 'goto-results',
         label: 'Controls and Results'
       });
@@ -233,10 +224,12 @@ function Dashboard ({ token }) {
         onOk={onClose}
         cancelButtonProps={{ style: { display: 'none' } }}
         footer={[
-          <Button key="copy-link" onClick={() => copyToClipboard(`${window.location.origin}/play/id/${quiz.active}`)}>
+          <Button key="copy-link" onClick={() => copyToClipboard(`${window.location.origin}/play/id/${quiz.active}`)}
+          aria-label="copy link button">
             Copy Link
           </Button>,
-          <Button key="close" onClick={onClose} type="primary">
+          <Button key="close" onClick={onClose} type="primary"
+          aria-label="close modal button">
             Close
           </Button>
         ]}
@@ -273,19 +266,19 @@ function Dashboard ({ token }) {
     <>
       <h1>Welcome to Dashboard</h1>
       <hr />
-      <Button
+      <Button aria-label={newGameShow ? 'cancel create button' : 'create button'}
         onClick={() => setNewGameShow(!newGameShow)}
         style={{ backgroundColor: '#1677ff', color: 'white' }}
         >
-        {newGameShow ? 'Wanna Hide Creating' : 'Wanna Create'} New Game
+        {newGameShow ? 'Cancel Creating' : 'Create'} New Game
       </Button>
       {newGameShow && (
         <>
           <br />
           <br />
-          Please enter the new game name
+          Game title:
           <br />
-          <Input
+          <Input name="name" aria-label="game name"
             placeholder="Name"
             value={newQuizName}
             onChange={(e) => setNewQuizName(e.target.value)}
@@ -293,7 +286,7 @@ function Dashboard ({ token }) {
           />
           <br />
           <br />
-          <Button
+          <Button aria-label="create game button"
             onClick={createNewGame}
             style={{ backgroundColor: '#1677ff', color: 'white' }}
             >Create new game</Button>
@@ -306,34 +299,34 @@ function Dashboard ({ token }) {
         {quizzes &&
           quizzes.map((quiz) => (
             <Col key={quiz.id} xs={24} sm={12} md={8} lg={6}>
-              <Card
+              <Card aria-label={quiz.name}
                 title={quiz.name}
               >
-                <img src={quiz.thumbnail} alt="Please update Thumbnail" style={{ maxWidth: '100%' }} />
-                <p>Questions Number: {quiz.questionsCount}</p>
-                <p>ID: {quiz.id}</p>
+                <img aria-label={`${quiz.name} thumbnail`} src={quiz.thumbnail} alt={`${quiz.name} thumbnail`} style={{ maxWidth: '100%' }} />
+                <p aria-label={`${quiz.name} question count`}>Questions Number: {quiz.questionsCount}</p>
+                <p aria-label={`${quiz.name} id`}>ID: {quiz.id}</p>
                 {
                   <>
-                    <Button
+                    <Button aria-label={`edit ${quiz.name} button`}
                       onClick={() => editGame(quiz.id)}
                       style={{ backgroundColor: '#E9F6EF', color: 'black' }}
                     >
                       Edit Game
                     </Button>
-                    <Button
+                    <Button aria-label={`delete ${quiz.name} button`}
                       onClick={() => deleteGame(quiz.id)}
                       style={{ marginLeft: '20px' }}
                       danger
                     >
                       Delete
                     </Button>
-                    <Button
+                    <Button aria-label={`edit ${quiz.name} with json button`}
                       onClick={(e) => handleFileUploadClick(e, quiz.id)}
                       style={{ backgroundColor: '#E9F6EF', color: 'black' }}
                     >
                       Edit Game with JSON file
                     </Button>
-                    <input
+                    <input aria-label={`${quiz.name} json input`}
                       type="file"
                       ref={fileInputRef}
                       style={{ display: 'none' }}
