@@ -1,3 +1,5 @@
+import './Lobby.css';
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Checkbox, Radio, Button, Table } from 'antd';
@@ -124,7 +126,9 @@ function Game () {
   }, [playerId, started, ended, question, answers, results]);
 
   if (!started) {
-    return <div>Waiting for game to start...</div>;
+    return <div className="lobby-background">
+      <center>Waiting for game to start</center>
+    </div>;
   }
 
   if (ended) {
