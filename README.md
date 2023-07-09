@@ -1,5 +1,5 @@
 
-### 1.1. Background & Motivation
+### 1. Background & Motivation
 
 In March 2022 you and your friends pitched a startup idea to produce *An innovative lightweight quiz platform for millenials* that will *revolutionise the secondary and tertiary education market for years*. You pitched this solution in the form of a web-based application, and called this quiz application **BigBrain**.
 
