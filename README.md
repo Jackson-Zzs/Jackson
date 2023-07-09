@@ -112,7 +112,7 @@ A series of features below need to be implemented in your ReactJS app to operate
  * After the final question is answered, a page is displayed showing the key results:
    * The player's performance in each question
 
-### 2.5. Advanced Features (0% for solo, 10% for pairs)
+### 2.5. Advanced Features 
 
 #### 2.5.1. Game Upload
  * For `2.2.1`, when a new game is created, the user can optionally upload a .csv or .json (you choose) file containing the full data for a game. The data structure is validated on the frontend before being passed to the backend normally. You should provide a copy of an example data file in your project repo ()
@@ -136,10 +136,10 @@ If you would like to disable linting checks during hot reload (and just use the 
 
 ### 2.7. Testing
 
-As part of this assignment you are required to write some tests for your components (component testing), and for your application as a whole (ui testing).
+Write some tests for your components (component testing), and for your application as a whole (ui testing).
 
 For **component testing**, you must:
- * Write tests for different components (3 if solo, 6 if working in a pair)
+ * Write tests for different components
  * For each of the components, they mustn't have more than 50% similarity (e.g. you can't test a "Card" component and a "BigCard" component, that are virtually the same)
  * Ensure your tests have excellent **coverage** (look at all different use cases and edge cases)
  * Ensure your tests have excellent **clarity** (well commented and code isn't overly complex)
@@ -166,26 +166,16 @@ If you're having issues using Cypress on WSL2, try following [this guide](https:
 
 A common question we get about component testing is 'what components do I test? I just only used a framework set of components'. The most common way students test components is by often creating a small abstract component where you put your own custom styles or properties. E.G. Creating a `MyButton` that wraps a MUI `Button`.
 
-### 2.8. Other notes
- * The port you can use to `fetch` data from the backend is defined in `frontend/src/config.json`
- * The data structure of a "question" is open ended for YOU to define how it's structured - it's not defined explicitly in the backend. Because of this, the backend has 3 wrapper functions defined in `backend/src/custom.js` that it uses to extract meaning from your custom data structure. <b>You will have to implement these as you build out your frontend</b>b>.
-* For users of typescript, [follow this guide](https://gitlab.cse.unsw.edu.au/COMP6080/23T1/react-typescript)
-
 ### 3.1. The Frontend
 
 Navigate to the `frontend` folder and run `npm install` to install all of the dependencies necessary to run the ReactJS app. Then run `npm start` to start the ReactJS app.
 
-Please note that some properties that the backend takes in are defined as blank objects. These are objects that can be defined by you, as the backend will simply store your object on some routes and then return it to you on other routes (i.e. the backend doesn't need to understand the schema of some objects you pass it). An example of this object is all of the data associated with a quiz.
+Please note that some properties that the backend takes in are defined as blank objects. These are objects that can be defined by you, as the backend will simply store your object on some routes and then return it to you on other routes (i.e. the backend doesn't need to understand the schema of some objects you pass it).
 
-This approach we've taken is actually designed to make the assignment _easier_, as it gives you control without having to worry about backend architecture.
-
-Don't forget to check out our helpful resources about [ReactJS](https://cgi.cse.unsw.edu.au/~cs6080/23T1/help/resources/reactjs).
 
 ### 3.2. The Backend (provided)
 
-You are prohibited from modifying the backend. No work needs to be done on the backend. It's provided to you simply to power your frontend.
-
-The backend server exists in your individual repository. After you clone this repo, you must run `npm install` in `backend` directory once.
+After you clone this repo, you must run `npm install` in `backend` directory once.
 
 To run the backend server, simply run `npm start` in the `backend` directory. This will start the backend.
 
@@ -195,6 +185,3 @@ Your backend is persistent in terms of data storage. That means the data will re
 
 Once the backend has started, you can view the API documentation by navigating to `http://localhost:[port]` in a web browser.
 
-The port that the backend runs on (and that the frontend can use) is specified in `frontend/src/config.js`. You can change the port in this file. This file exists so that your frontend knows what port to use when talking to the backend.
-
-Please note: You CAN modify the backend for bonus marks. But you cannot modify the backend to make the core requirements of the assignment easier (e.g. by adding routes to make the other feature building easier).
